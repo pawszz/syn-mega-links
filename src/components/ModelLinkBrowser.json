@@ -1,0 +1,35 @@
+import React, { useState, useEffect } from 'react';
+import getProfileImage from '../fetchProfileImage';  // Adjust path based on your file structure
+
+const ModelLinkBrowser = () => {
+  const [models, setModels] = useState([
+    { id: 1089419, model: "KatrinaMarie", link: "https://mega.nz/folder/czcHRQhC#UQI9R-o8RnwGos-b6Sp6oA" },
+    { id: 1089418, model: "ValeCasta", link: "https://mega.nz/folder/iPgiXTBQ#VUeGeGN1UxoG8ZgsJa7mtg" },
+    // More models
+  ]);
+
+  const [profileImages, setProfileImages] = useState({});
+
+  useEffect(() => {
+    models.forEach(async (item) => {
+      const imageUrl = await getProfileImage(item.model);  // Fetch the profile image
+      setProfileImages(prevState => ({
+        ...prevState,
+        [item.model]: imageUrl
+      }));
+    });
+  }, [models]);
+
+  return (
+    <div>
+      {models.map((item) => (
+        <div key={item.id}>
+          <img src={profileImages[item.model] || 'https://via.placeholder.com/150'} alt={item.model} />
+          <a href={item.link} target="_blank" rel="noopener noreferrer">{item.model}</a>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ModelLinkBrowser;
